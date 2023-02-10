@@ -9,11 +9,6 @@ const {
 
 //get all users
 function getAllUsers(req, res) {
-  // const form = formidable({ multiples: true });
-  // form.parse(req, (err, fields, files) => {
-  //   console.log(fields, files);
-  //   res.end({ message: "ok" });
-  // });
   res.json(users);
 }
 
