@@ -168,12 +168,7 @@
     ></div>
 
     <div id="container" class="my-3 p-2">
-      <form
-        id="form"
-        enctype="multipart/form-data"
-        method="post"
-        action="/users"
-      >
+      <form id="form" enctype="multipart/form-data" method="post">
         <!-- name -->
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
@@ -208,16 +203,14 @@
 
         <!-- file upload -->
         <div class="mb-3">
-          <form id="img-form">
-            <label for="file" class="form-label">Image upload</label>
-            <input
-              type="file"
-              class="form-control"
-              id="file"
-              name="file"
-              multiple
-            />
-          </form>
+          <label for="file" class="form-label">Image upload</label>
+          <input
+            type="file"
+            class="form-control"
+            id="file"
+            name="file"
+            multiple
+          />
         </div>
 
         <button type="submit" class="btn btn-primary d-block m-auto">

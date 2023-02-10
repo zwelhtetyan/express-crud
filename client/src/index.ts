@@ -7,38 +7,38 @@ interface User {
   updatedAt?: string;
 }
 
-const form = <HTMLFormElement>document.getElementById('form');
-const editFrom = <HTMLFormElement>document.getElementById('edit-form');
-const successAlert = <HTMLDivElement>document.querySelector('.alert-success');
-const errorAlert = <HTMLDivElement>document.querySelector('.alert-danger');
-const modalBtn = <HTMLButtonElement>document.querySelector('.detail-modal-btn');
+const form = <HTMLFormElement>document.getElementById("form");
+const editFrom = <HTMLFormElement>document.getElementById("edit-form");
+const successAlert = <HTMLDivElement>document.querySelector(".alert-success");
+const errorAlert = <HTMLDivElement>document.querySelector(".alert-danger");
+const modalBtn = <HTMLButtonElement>document.querySelector(".detail-modal-btn");
 const modalTitle = <HTMLHeadingElement>(
-  document.querySelector('.detail-modal-title')
+  document.querySelector(".detail-modal-title")
 );
-const modalBody = <HTMLDivElement>document.querySelector('.detail-modal-body');
+const modalBody = <HTMLDivElement>document.querySelector(".detail-modal-body");
 const modalCloseBtn = <HTMLButtonElement>(
-  document.querySelector('.modal-close-btn')
+  document.querySelector(".modal-close-btn")
 );
 const modalDeleteBtn = <HTMLButtonElement>(
-  document.querySelector('.modal-delete-btn')
+  document.querySelector(".modal-delete-btn")
 );
 const editModalBtn = <HTMLButtonElement>(
-  document.querySelector('.edit-modal-btn')
+  document.querySelector(".edit-modal-btn")
 );
 const editModalTitle = <HTMLHeadingElement>(
-  document.querySelector('.edit-modal-title')
+  document.querySelector(".edit-modal-title")
 );
 const editModalBody = <HTMLDivElement>(
-  document.querySelector('.edit-modal-body')
+  document.querySelector(".edit-modal-body")
 );
 
 insertUsers();
 
 // id to edit user --global variable
-let CURRENT_USER_ID: string = '';
+let CURRENT_USER_ID: string = "";
 
 async function insertUsers() {
-  const usersElem = <HTMLDivElement>document.querySelector('.users');
+  const usersElem = <HTMLDivElement>document.querySelector(".users");
 
   const users = await getAllUsers();
 
@@ -53,7 +53,7 @@ async function insertUsers() {
       <p class="fw-normal fs-5">Email: ${user.email}</p>
       <p class="m-0 fs-6">Created At: ${user.createdAt}</p>
       <p class="m-0 fs-6 ${
-        user.updatedAt ? 'd-block' : 'd-none'
+        user.updatedAt ? "d-block" : "d-none"
       }">Updated At: ${user.updatedAt}</p>
 
       <div class="edit-icon btn btn-primary position-absolute top-0">
@@ -69,25 +69,25 @@ async function insertUsers() {
       </div>
     </div>`
     )
-    .join('');
+    .join("");
 
   usersElem.innerHTML = HTML;
 
   //edit
-  const allEditIcons = document.querySelectorAll('.edit-icon');
+  const allEditIcons = document.querySelectorAll(".edit-icon");
   allEditIcons.forEach((editIcon, idx) =>
-    editIcon.addEventListener('click', (e) => handleEditUser(e, users[idx]))
+    editIcon.addEventListener("click", (e) => handleEditUser(e, users[idx]))
   );
 
   // delete
-  const allTrashIcons = document.querySelectorAll('.trash-icon');
+  const allTrashIcons = document.querySelectorAll(".trash-icon");
   allTrashIcons.forEach((trashIcon, idx) =>
-    trashIcon.addEventListener('click', (e) => deleteConfirm(e, users[idx]))
+    trashIcon.addEventListener("click", (e) => deleteConfirm(e, users[idx]))
   );
 }
 
 async function getAllUsers() {
-  const res = await fetch('http://localhost:5000/users');
+  const res = await fetch("http://localhost:5000/users");
   const data = await res.json();
   console.log(data);
   return data;
@@ -100,20 +100,19 @@ async function getUser(id: string) {
 }
 
 async function addUser(newUser: FormData) {
-  const res = await fetch('http://localhost:5000/users', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  await fetch("http://localhost:5000/users", {
+    method: "POST",
     body: newUser,
   });
+  console.log("ik");
+  // const data = await res.json();
 
-  const data = await res.json();
-
-  return { status: res.ok ? 'success' : 'error', message: data.message };
+  // return { status: res.ok ? "success" : "error", message: data.message };
 }
 
 async function deleteUser(id: string) {
   const res = await fetch(`http://localhost:5000/users/${id}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
 
   const data = await res.json();
@@ -124,11 +123,11 @@ async function deleteUser(id: string) {
 function deleteConfirm(e: Event, user: User) {
   e.stopPropagation();
 
-  modalTitle.textContent = 'Delete User';
+  modalTitle.textContent = "Delete User";
   modalBody.innerHTML = `<h5>Are you sure you want to delete this user ?</h5><p class="mb-0">Name - ${user.name}</p><p class="mb-0">Email - ${user.email}</p>`;
 
-  modalCloseBtn.classList.add('d-none');
-  modalDeleteBtn.classList.remove('d-none');
+  modalCloseBtn.classList.add("d-none");
+  modalDeleteBtn.classList.remove("d-none");
 
   CURRENT_USER_ID = user.id;
 
@@ -143,28 +142,28 @@ async function handleDeleteUser(id: string) {
   showAlert(successAlert, message);
 }
 
-modalDeleteBtn.addEventListener('click', () =>
+modalDeleteBtn.addEventListener("click", () =>
   handleDeleteUser(CURRENT_USER_ID)
 );
 
 async function editUser(updatedUser: User) {
   const res = await fetch(`http://localhost:5000/users/${updatedUser.id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updatedUser),
   });
 
   const data = await res.json();
 
-  return { status: res.ok ? 'success' : 'error', message: data.message };
+  return { status: res.ok ? "success" : "error", message: data.message };
 }
 
 function handleEditUser(e: Event, user: User) {
   e.stopPropagation();
 
-  const nameInput = <HTMLInputElement>editFrom.querySelector('#name');
-  const emailInput = <HTMLInputElement>editFrom.querySelector('#email');
-  const passwordInput = <HTMLInputElement>editFrom.querySelector('#password');
+  const nameInput = <HTMLInputElement>editFrom.querySelector("#name");
+  const emailInput = <HTMLInputElement>editFrom.querySelector("#email");
+  const passwordInput = <HTMLInputElement>editFrom.querySelector("#password");
 
   nameInput.value = user.name;
   emailInput.value = user.email;
@@ -174,24 +173,24 @@ function handleEditUser(e: Event, user: User) {
   editModalBtn.click();
 }
 
-form.addEventListener('submit', async function (e) {
+form.addEventListener("submit", async function (e) {
   e.preventDefault();
-
+  console.log("ok");
   const formData = new FormData(form);
 
-  const newUser = {
-    id: new Date().getTime().toString(),
-    name: formData.get('name')?.toString()!,
-    email: formData.get('email')?.toString()!,
-    password: formData.get('password')?.toString()!,
-  };
+  // const newUser = {
+  //   id: new Date().getTime().toString(),
+  //   name: formData.get("name")?.toString()!,
+  //   email: formData.get("email")?.toString()!,
+  //   password: formData.get("password")?.toString()!,
+  // };
 
-  if (!newUser.name || !newUser.email || !newUser.password) {
-    const message = 'Please fill all required fields';
-    showAlert(errorAlert, message);
-    return;
-  }
-
+  // if (!newUser.name || !newUser.email || !newUser.password) {
+  //   const message = "Please fill all required fields";
+  //   showAlert(errorAlert, message);
+  //   return;
+  // }
+  await addUser(formData);
   // const { status, message } = await addUser(formData);
 
   // if (status === 'success') {
@@ -205,27 +204,27 @@ form.addEventListener('submit', async function (e) {
   // }
 });
 
-editFrom.addEventListener('submit', async function (e) {
+editFrom.addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const formData = new FormData(this);
 
   const updatedUser = {
     id: CURRENT_USER_ID,
-    name: formData.get('name')?.toString()!,
-    email: formData.get('email')?.toString()!,
-    password: formData.get('password')?.toString()!,
+    name: formData.get("name")?.toString()!,
+    email: formData.get("email")?.toString()!,
+    password: formData.get("password")?.toString()!,
   };
 
   if (!updatedUser.name || !updatedUser.email || !updatedUser.password) {
-    const message = 'Please fill all required fields';
+    const message = "Please fill all required fields";
     showAlert(errorAlert, message);
     return;
   }
 
   const { status, message } = await editUser(updatedUser);
 
-  if (status === 'success') {
+  if (status === "success") {
     insertUsers();
 
     form.reset();
@@ -244,19 +243,19 @@ async function showUserDetail(id: string) {
   modalTitle.textContent = userDetail.name;
   modalBody.textContent = `Email is ${userDetail.email}`;
 
-  modalCloseBtn.classList.remove('d-none');
-  modalDeleteBtn.classList.add('d-none');
+  modalCloseBtn.classList.remove("d-none");
+  modalDeleteBtn.classList.add("d-none");
 
   modalBtn.click();
 }
 
 function removeAlert(elem: HTMLDivElement) {
-  setTimeout(() => (elem.style.top = '-50%'), 1500);
+  setTimeout(() => (elem.style.top = "-50%"), 1500);
 }
 
 function showAlert(elem: HTMLDivElement, message: string) {
   elem.textContent = message;
-  elem.style.top = '0';
+  elem.style.top = "0";
 
   removeAlert(elem);
 }
