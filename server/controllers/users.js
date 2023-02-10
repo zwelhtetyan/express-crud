@@ -1,28 +1,32 @@
-const users = require('../dummy_data/users');
-const formatDate = require('../utils/formatDate');
-const createdAt = require('../utils/formatDate');
-const formidable = require('formidable');
+const users = require("../dummy_data/users");
+const formatDate = require("../utils/formatDate");
+const createdAt = require("../utils/formatDate");
+const formidable = require("formidable");
 const {
   validateEmail,
   validateEmailForUpdatedUser,
-} = require('../utils/validateEmail');
+} = require("../utils/validateEmail");
 
 //get all users
 function getAllUsers(req, res) {
-  const form = formidable({ multiples: true });
-  form.parse(req, (err, fields, files) => {
-    console.log(fields, files);
-    res.end({ message: 'ok' });
-  });
+  // const form = formidable({ multiples: true });
+  // form.parse(req, (err, fields, files) => {
+  //   console.log(fields, files);
+  //   res.end({ message: "ok" });
+  // });
+  res.json(users);
 }
 
 // add new user
 function addNewUser(req, res) {
-  const newUser = req.body;
+  const form = formidable({ multiples: true });
+  form.parse(req, (err, fields, files) => {
+    console.log(err);
+    console.log(fields, files);
+    res.status(200).send({ message: "successfully added" });
+  });
 
-  console.log(newUser);
-
-  res.status(200).send({ message: 'successfully added' });
+  //res.status(200).send({ message: "successfully added" });
 
   // const isValidEmail = validateEmail(users, newUser.email);
 
@@ -64,9 +68,9 @@ function updateUser(req, res) {
     const updatedUser = { ...userToUpdate, ...req.body, updatedAt };
 
     users.splice(idx, 1, updatedUser);
-    res.status(200).send({ message: 'User updated successfully' });
+    res.status(200).send({ message: "User updated successfully" });
   } else {
-    res.status(400).send({ message: 'Email already exit on server!' });
+    res.status(400).send({ message: "Email already exit on server!" });
   }
 }
 
@@ -78,7 +82,7 @@ function deleteUser(req, res) {
 
   users.splice(idx, 1);
 
-  res.status(200).send({ message: 'User deleted successfully' });
+  res.status(200).send({ message: "User deleted successfully" });
 }
 
 module.exports = { getAllUsers, addNewUser, getUser, updateUser, deleteUser };
