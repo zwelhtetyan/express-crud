@@ -2,10 +2,12 @@ const users = require("../dummy_data/users");
 const formatDate = require("../utils/formatDate");
 const createdAt = require("../utils/formatDate");
 const formidable = require("formidable");
+const fs = require("fs");
 const {
   validateEmail,
   validateEmailForUpdatedUser,
 } = require("../utils/validateEmail");
+const path = require("path");
 
 //get all users
 function getAllUsers(req, res) {
@@ -16,8 +18,22 @@ function getAllUsers(req, res) {
 function addNewUser(req, res) {
   const form = formidable({ multiples: true });
   form.parse(req, (err, fields, files) => {
-    console.log(err);
-    console.log(fields, files);
+    console.log(err, files, fields);
+
+    if (!files.file.originalFilename) {
+      return;
+    }
+    const tempFilePath = files.file.filepath;
+    const newFileName = files.file.newFilename + files.file.originalFilename;
+    const newFilePath = path.join(__dirname, "..", "files", newFileName);
+    fs.renameSync(tempFilePath, newFilePath);
+
+    users.push({
+      ...fields,
+      createdAt: createdAt(new Date().getTime()),
+      id: new Date().getTime(),
+      src: newFileName,
+    });
     res.status(200).send({ message: "successfully added" });
   });
 
