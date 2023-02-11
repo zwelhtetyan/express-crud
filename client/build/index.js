@@ -103,10 +103,23 @@ function handleEditUser(e, user) {
     editModalBtn.click();
 }
 form.addEventListener("submit", async function (e) {
+    var _a, _b, _c;
     e.preventDefault();
     console.log("ok");
     const formData = new FormData(form);
+    const newUser = {
+        id: new Date().getTime().toString(),
+        name: (_a = formData.get("name")) === null || _a === void 0 ? void 0 : _a.toString(),
+        email: (_b = formData.get("email")) === null || _b === void 0 ? void 0 : _b.toString(),
+        password: (_c = formData.get("password")) === null || _c === void 0 ? void 0 : _c.toString(),
+    };
+    if (!newUser.name || !newUser.email || !newUser.password) {
+        const message = "Please fill all required fields";
+        showAlert(errorAlert, message);
+        return;
+    }
     await addUser(formData);
+    insertUsers();
 });
 editFrom.addEventListener("submit", async function (e) {
     var _a, _b, _c;

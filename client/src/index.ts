@@ -172,25 +172,26 @@ function handleEditUser(e: Event, user: User) {
   CURRENT_USER_ID = user.id;
   editModalBtn.click();
 }
-
+/// form
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
   console.log("ok");
   const formData = new FormData(form);
 
-  // const newUser = {
-  //   id: new Date().getTime().toString(),
-  //   name: formData.get("name")?.toString()!,
-  //   email: formData.get("email")?.toString()!,
-  //   password: formData.get("password")?.toString()!,
-  // };
+  const newUser = {
+    id: new Date().getTime().toString(),
+    name: formData.get("name")?.toString()!,
+    email: formData.get("email")?.toString()!,
+    password: formData.get("password")?.toString()!,
+  };
 
-  // if (!newUser.name || !newUser.email || !newUser.password) {
-  //   const message = "Please fill all required fields";
-  //   showAlert(errorAlert, message);
-  //   return;
-  // }
+  if (!newUser.name || !newUser.email || !newUser.password) {
+    const message = "Please fill all required fields";
+    showAlert(errorAlert, message);
+    return;
+  }
   await addUser(formData);
+  insertUsers();
   // const { status, message } = await addUser(formData);
 
   // if (status === 'success') {
