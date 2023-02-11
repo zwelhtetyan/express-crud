@@ -1,13 +1,14 @@
-const users = require("../dummy_data/users");
-const formatDate = require("../utils/formatDate");
-const createdAt = require("../utils/formatDate");
-const formidable = require("formidable");
-const fs = require("fs");
+const users = require('../dummy_data/users');
+const formatDate = require('../utils/formatDate');
+const createdAt = require('../utils/formatDate');
+const formidable = require('formidable');
+const fs = require('fs');
 const {
   validateEmail,
   validateEmailForUpdatedUser,
-} = require("../utils/validateEmail");
-const path = require("path");
+} = require('../utils/validateEmail');
+const createFilePath = require('../utils/createFile');
+const createFile = require('../utils/createFile');
 
 //get all users
 function getAllUsers(req, res) {
@@ -17,27 +18,36 @@ function getAllUsers(req, res) {
 // add new user
 function addNewUser(req, res) {
   const form = formidable({ multiples: true });
+
   form.parse(req, (err, fields, files) => {
-    console.log(err, files, fields);
+    const newUser = {
+      name: fields.name,
+      email: fields.email,
+      password: fields.password,
+      images: [],
+    };
 
-    if (!files.file.originalFilename) {
-      return;
+    if (!newUser.name || !newUser.email || !newUser.password) {
+      return res
+        .status(500)
+        .json({ message: 'Please fill in all required fields.' });
     }
-    const tempFilePath = files.file.filepath;
-    const newFileName = files.file.newFilename + files.file.originalFilename;
-    const newFilePath = path.join(__dirname, "..", "files", newFileName);
-    fs.renameSync(tempFilePath, newFilePath);
 
-    users.push({
-      ...fields,
-      createdAt: createdAt(new Date().getTime()),
-      id: new Date().getTime(),
-      src: newFileName,
-    });
-    res.status(200).send({ message: "successfully added" });
+    if (err) {
+      return res.status(500).send({ message: 'Error uploading files' });
+    }
+
+    // creating files in images folder [can configure folder path inside 'utils/createFile']
+    if (Array.isArray(files.file)) {
+      files.file.forEach((file) => {
+        createFile(file);
+      });
+    } else if (files.file.originalFilename !== '') {
+      createFile(files.file);
+    }
   });
 
-  //res.status(200).send({ message: "successfully added" });
+  //======================================
 
   // const isValidEmail = validateEmail(users, newUser.email);
 
@@ -79,9 +89,9 @@ function updateUser(req, res) {
     const updatedUser = { ...userToUpdate, ...req.body, updatedAt };
 
     users.splice(idx, 1, updatedUser);
-    res.status(200).send({ message: "User updated successfully" });
+    res.status(200).send({ message: 'User updated successfully' });
   } else {
-    res.status(400).send({ message: "Email already exit on server!" });
+    res.status(400).send({ message: 'Email already exit on server!' });
   }
 }
 
@@ -93,7 +103,7 @@ function deleteUser(req, res) {
 
   users.splice(idx, 1);
 
-  res.status(200).send({ message: "User deleted successfully" });
+  res.status(200).send({ message: 'User deleted successfully' });
 }
 
 module.exports = { getAllUsers, addNewUser, getUser, updateUser, deleteUser };
