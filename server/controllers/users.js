@@ -37,13 +37,27 @@ function addNewUser(req, res) {
       return res.status(500).send({ message: 'Error uploading files' });
     }
 
-    // creating files in images folder [can configure folder path inside 'utils/createFile']
-    if (Array.isArray(files.file)) {
-      files.file.forEach((file) => {
-        createFile(file);
-      });
-    } else if (files.file.originalFilename !== '') {
-      createFile(files.file);
+    const isValidEmail = validateEmail(users, newUser.email);
+
+    if (isValidEmail) {
+      // creating files in images folder [can configure folder path inside 'utils/createFile']
+      if (Array.isArray(files.file)) {
+        files.file.forEach((file) => {
+          const fileName = createFile(file);
+          newUser.images.unshift(fileName);
+        });
+      } else if (files.file.originalFilename !== '') {
+        const fileName = createFile(files.file);
+        newUser.images.unshift(fileName);
+      }
+
+      const createdAt = formatDate(new Date());
+
+      users.unshift({ ...newUser, createdAt });
+
+      res.status(200).send({ message: 'User added successfully' });
+    } else {
+      res.status(400).send({ message: 'Email already exit on server!' });
     }
   });
 
