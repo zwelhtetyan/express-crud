@@ -1,14 +1,12 @@
 const users = require('../dummy_data/users');
 const formatDate = require('../utils/formatDate');
-const createdAt = require('../utils/formatDate');
 const formidable = require('formidable');
-const fs = require('fs');
 const {
   validateEmail,
   validateEmailForUpdatedUser,
 } = require('../utils/validateEmail');
-const createFilePath = require('../utils/createFile');
 const createFile = require('../utils/createFile');
+const { v4: uuidv4 } = require('uuid');
 
 //get all users
 function getAllUsers(req, res) {
@@ -53,26 +51,13 @@ function addNewUser(req, res) {
 
       const createdAt = formatDate(new Date());
 
-      users.unshift({ ...newUser, createdAt });
+      users.unshift({ ...newUser, createdAt, id: uuidv4() });
 
       res.status(200).send({ message: 'User added successfully' });
     } else {
       res.status(400).send({ message: 'Email already exit on server!' });
     }
   });
-
-  //======================================
-
-  // const isValidEmail = validateEmail(users, newUser.email);
-
-  // const createdAt = formatDate(new Date());
-
-  // if (isValidEmail) {
-  //   users.unshift({ ...newUser, createdAt });
-  //   res.status(200).send({ message: 'User added successfully' });
-  // } else {
-  //   res.status(400).send({ message: 'Email already exit on server!' });
-  // }
 }
 
 // get single user

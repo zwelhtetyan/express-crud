@@ -1,9 +1,19 @@
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 !important;
+}
+
 #container {
   max-width: 700px;
   margin: 0 auto;
 }
 
-.user {
+.userCard {
   background: #e1e1e1c7;
   padding: 1rem;
   border-radius: 5px;
@@ -19,6 +29,23 @@
   z-index: 1000000;
 }
 
-.edit-icon {
-  right: 3.5rem;
+.edit-btn {
+  right: 5rem;
+}
+
+.user_container {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.img_container {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+.img_container .user_img {
+  width: 100%;
+  border-radius: 5px;
 }
