@@ -23,9 +23,7 @@
 
 Note: liveserver doesn't work in this case because it watch all folder inside both client and server. So we create a file inside server , it reloads the page. I would recommend you to open index.html file like the way below.
 
-```
-Find index.html file in you local file(home/desktop) and right click =>  open in browser
-```
+`Find index.html file in you local file(home/desktop) and right click =>  open in browser`
 
 #### Contribution
 
